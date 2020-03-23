@@ -1,0 +1,7 @@
+adverb_id,cluster_key,adverbs
+0,coarsely,"['coarsely', 'coarse', 'thickly', 'not finely', 'not fine']"
+1,completely,"['fully', 'completely', 'thoroughly', 'totally', 'entirely', 'thorough', 'rigorously', 'not briefly']"
+2,finely,"['finely', 'fine', 'thinly', 'thin']"
+3,partially,"['nearly', 'significantly', 'not fully', 'not completely', 'not thoroughly', 'half', 'halfway', 'partially', 'somewhat', 'slightly', 'briefly', 'barely', 'imperceptibly']"
+4,quickly,"['vigorously', 'rapidly', 'speedily', 'hastily', 'quickly', 'quick', 'fast', 'swiftly', 'briskly', 'not slowly']"
+5,slowly,"['not vigorously', 'not quickly', 'not fast', 'slow', 'slowly']"

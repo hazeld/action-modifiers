@@ -1,0 +1,73 @@
+action_id,cluster_key,actions
+0,absorb,['absorb']
+1,add,['add']
+2,adjust,"['adjust', 'change']"
+3,arrange,"['align', 'line', 'arrange', 'straighten']"
+4,attach,"['join', 'connect', 'attach']"
+5,bend,['bend']
+6,brew,['brew']
+7,burn,['burn']
+8,carry,"['bring', 'carry']"
+9,close,"['seal', 'close', 'shut', 'lock', 'tie']"
+10,cook,"['cook', 'heat', 'boil', 'bubble', 'fry', 'sear', 'saute', 'bake', 'brown', 'simmer', 'grill', 'toast', 'reduce', 'thicken', 'roast', 'color', 'warm', 'steam', 'soften', 'blanch', 'poach', 'char', 'caramelize', 'caramelise', 'sizzle', 'saute']"
+11,cool,"['cool', 'chill', 'freeze']"
+12,cover,"['cover', 'wrap']"
+13,crank,['crank']
+14,cut,"['cut', 'chop', 'trim', 'slice', 'dice', 'mince', 'carve', 'shred']"
+15,dip,"['dip', 'submerge', 'drop', 'coat']"
+16,drain,"['drain', 'strain']"
+17,drill,['drill']
+18,dry,['dry']
+19,fall,['fall']
+20,feed,['feed']
+21,fill,"['fill', 'fit', 'pack', 'stuff']"
+22,fold,['fold']
+23,grate,['grate']
+24,grind,"['grind', 'ground']"
+25,hit,"['hit', 'tap', 'knock', 'tenderize', 'hammer']"
+26,hold,"['hold', 'handle']"
+27,insert,['insert']
+28,install,"['install', 'instal']"
+29,knead,['knead']
+30,lower,['lower']
+31,make,"['make', 'prepare', 'assemble', 'form', 'shape', 'build', 'mold']"
+32,mark,['mark']
+33,measure,['measure']
+34,melt,['melt']
+35,mix,"['mix', 'blend', 'combine', 'incorporate', 'stir', 'dissolve', 'beat', 'scramble', 'whisk', 'whip']"
+36,mount,"['mount', 'hang']"
+37,move,"['slide', 'slip', 'transfer', 'move']"
+38,open,['open']
+39,peel,['peel']
+40,pour,"['pour', 'drip', 'tip', 'sift']"
+41,press,"['push', 'press', 'squeeze', 'crush', 'squish', 'smash', 'mash', 'deflate']"
+42,pull,"['drag', 'pull']"
+43,pump,['pump']
+44,put,"['place', 'put', 'lay', 'lie', 'pop']"
+45,raise,"['lift', 'raise', 'rise', 'jack']"
+46,release,['release']
+47,roll,['roll']
+48,scrape,['scrape']
+49,secure,"['secure', 'clamp']"
+50,separate,"['break', 'separate', 'split', 'divide', 'crack', 'tear', 'rip']"
+51,set,['set']
+52,shake,['shake']
+53,sit,['sit']
+54,soak,"['soak', 'marinate']"
+55,spoon,['spoon']
+56,spray,['spray']
+57,spread,"['spread', 'apply', 'distribute', 'rub', 'smooth', 'flatten', 'smear', 'brush', 'grease', 'butter', 'paint', 'oil']"
+58,sprinkle,"['season', 'salt', 'sprinkle', 'flour', 'crumble', 'drizzle']"
+59,stack,['stack']
+60,start,['start']
+61,stick,"['stick', 'glue']"
+62,stop,['stop']
+63,stretch,['stretch']
+64,strip,['strip']
+65,take,"['take', 'grab', 'remove', 'draw']"
+66,touch,['touch']
+67,tuck,['tuck']
+68,turn,"['turn', 'twist', 'flip', 'toss', 'spin', 'rotate']"
+69,twist,"['tighten', 'screw', 'loosen']"
+70,use,['use']
+71,wash,"['clean', 'wash', 'rinse', 'wipe', 'scrub']"
