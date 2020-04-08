@@ -2,6 +2,7 @@ import os
 import math
 import numpy as np
 import pandas as pd
+import itertools
 import torch.utils.data as data
 
 class AdverbDataset(data.Dataset):
@@ -23,11 +24,15 @@ class AdverbDataset(data.Dataset):
 
         self.adverbs, self.antonyms = self._add_antonyms(self.adverbs) ## antonyms necessary for training
 
+        self.pairs = list(itertools.product(self.adverbs, self.actions))
+
         assert pd.merge(self.train_list, self.test_list, how='inner', on=['id', 'action', 'adverb', 'vid_id']).shape[0] == 0, 'train and test are not mutually exclusive'
 
         self.data = self.train_list if self.phase == 'train' else self.test_list
         self.adverb2idx = {adverb: idx for idx, adverb in enumerate(self.adverbs)}
+        self.idx2adverb = {v:k for k, v in self.adverb2idx.items()}
         self.action2idx = {action: idx for idx, action in enumerate(self.actions)}
+        self.idx2action = {v:k for k, v in self.action2idx.items()}
         self._load_all_features()
         self.feature_dim = self.feature_list[0][0].shape[-1]
         print('%d features loaded'%(len(self.feature_list)))

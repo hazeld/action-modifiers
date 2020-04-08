@@ -10,7 +10,7 @@ parser.add_argument('--adverb-filter', nargs='+', default=None, help='select adv
 
 ## model parameters
 parser.add_argument('--emb-dim', type=int, default=300, help='dimension of common embedding space')
-parser.add_argument('--no-glove-init', dest='glove-init', action='store_false',
+parser.add_argument('--no-glove-init', dest='glove_init', action='store_false',
                     help='don\'t initialize the action embeddings with word vectors')
 parser.add_argument('--temporal-agg', default='sdp', choices=['single', 'average', 'sdp'],
                     help='method to aggregate the features in the window of size T')
