@@ -124,10 +124,10 @@ class ActionModifiers(nn.Module):
 
         pos_modifiers = torch.stack([self.action_modifiers[adv.item()] for adv in adverbs])
         positive = self.apply_modifiers(pos_modifiers, action_embedding)
-        negative_act = torch.apply_modifiers(pos_modifiers, neg_action_embedding)
+        negative_act = self.apply_modifiers(pos_modifiers, neg_action_embedding)
 
-        neg_modifiers = torch.stack([self.action_modifiers[adv.item()] for adv in adverbs])
-        negative_adv = torch.apply_modifiers(neg_modifiers, action_embedding)
+        neg_modifiers = torch.stack([self.action_modifiers[adv.item()] for adv in neg_adverbs])
+        negative_adv = self.apply_modifiers(neg_modifiers, action_embedding)
 
         loss_triplet_act = F.triplet_margin_loss(video_embedding, positive, negative_act, margin=self.margin)
         loss_triplet_adv = F.triplet_margin_loss(video_embedding, positive, negative_adv, margin=self.margin)
@@ -210,3 +210,5 @@ class Evaluator:
         action_gt_scores = self.get_gt_action_scores(scores, action_gt)
         antonym_action_gt_scores = self.get_gt_action_antonym_scores(scores, action_gt, adverb_gt)
         return scores, action_gt_scores, antonym_action_gt_scores
+
+    
