@@ -1,5 +1,5 @@
 # Action Modifiers
-Code for the CVPR 2020 paper 'Action Modifiers: Learning from Adverbs in Instructional Videos' coming soon.
+Code and data for the CVPR 2020 paper ['Action Modifiers: Learning from Adverbs in Instructional Videos'](https://arxiv.org/abs/1912.06617).
 
 ## Data
 
