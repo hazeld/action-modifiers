@@ -17,6 +17,10 @@ parser.add_argument('--temporal-agg', default='sdp', choices=['single', 'average
 parser.add_argument('--modality', default='both', choices=['rgb', 'flow', 'both'],
                     help='modalities used to train the model')
 parser.add_argument('--t', type=int, default=20, help='size of the temporal window used around the weak timestamp')
+parser.add_argument('--no-pretrain-action', dest='pretrain_action', action='store_false',
+                    help='don\'t first train the actions without action modifiers')
+parser.add_argument('--adverb-start', type=int, default=200,
+                    help='epoch to introduce action modifiers at if action if \'pretrain action\' is True')
 
 ## optimization
 parser.add_argument('--batch-size', type=int, default=512, help='number of data points in a batch')

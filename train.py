@@ -9,6 +9,8 @@ from opts import parser
 from dataset import AdverbDataset
 from model import ActionModifiers, Evaluator
 
+from torch.utils.tensorboard import SummaryWriter
+
 def main(args):
     os.makedirs(args.checkpoint_dir, exist_ok=True)
     save_args(args)
@@ -30,7 +32,12 @@ def main(args):
                        if ('action_modifiers' in name) and param.requires_grad]
     other_params = [param for name, param in model.named_parameters()
                     if ('action_modifiers' not in name) and param.requires_grad]
-    optim_params = [{'params': modifier_params, 'lr':0.1*args.lr}, {'params': other_params}]
+    if not args.pretrain_action:
+        optim_params = [{'name': 'action_modifiers', 'params': modifier_params},
+                        {'name': 'embedding', 'params': other_params}]
+    else:
+        optim_params = [{'name': 'action_modifiers', 'params': modifier_params, 'lr':0},
+                        {'name': 'embedding', 'params': other_params}]
     optimizer = optim.Adam(optim_params, lr=args.lr, weight_decay=args.wd)
 
     start_epoch = 0
@@ -43,13 +50,35 @@ def main(args):
         model.load_state_dict(model_state_dict)
         start_epoch = checkpoint['epoch']
 
-    test(model, test_loader, evaluator, start_epoch)
-    for epoch in range(start_epoch, start_epoch+args.max_epochs+1):
-        train(model, train_loader, optimizer, epoch)
-        if epoch % args.eval_interval == 0:
-            test(model, test_loader, evaluator, epoch)
+    writer = SummaryWriter(os.path.join(args.checkpoint_dir, 'log'))
 
-def train(model, train_loader, optimizer, epoch):
+    test(model, test_loader, evaluator, writer, start_epoch)
+    for epoch in range(start_epoch, start_epoch+args.max_epochs+1):
+        if args.pretrain_action and epoch == args.adverb_start:
+            introduce_adverbs(optimizer)
+        train(model, train_loader, optimizer, writer, epoch)
+        if epoch % args.eval_interval == 0:
+            test(model, test_loader, evaluator, writer, epoch)
+        if epoch % args.save_interval == 0 and epoch > 0:
+            save_checkpoint(model, epoch)
+    writer.close()
+
+def save_checkpoint(model, epoch):
+    state = {
+        'net': model.state_dict(),
+        'epoch': epoch,
+    }
+    torch.save(state, os.path.join(args.checkpoint_dir, 'ckpt_E_%d'%(epoch)))
+
+def introduce_adverbs(optimizer):
+    for param_group in optimizer.param_groups:
+        if param_group['name'] == 'action_modifiers':
+            param_group['lr'] = args.lr * 0.1 
+        else:
+            param_group['lr'] = args.lr * 0.1
+
+
+def train(model, train_loader, optimizer, writer, epoch):
     model.train()
     train_loss = 0.0
     act_loss = 0.0
@@ -67,9 +96,12 @@ def train(model, train_loader, optimizer, epoch):
     train_loss /= len(train_loader)
     act_loss /= len(train_loader)
     adv_loss /= len(train_loader)
+    writer.add_scalar('Loss/Train/Total', train_loss, epoch)
+    writer.add_scalar('Loss/Train/Action', act_loss, epoch)
+    writer.add_scalar('Loss/Train/Adverb', adv_loss, epoch)
     print('E: %d | L: %.2E | L_act: %.2E | L_adv: %.2E '%(epoch, train_loss, act_loss, adv_loss))
 
-def test(model, test_loader, evaluator, epoch):
+def test(model, test_loader, evaluator, writer, epoch):
     model.eval()
     accuracies = []
     for idx, data in tqdm.tqdm(enumerate(test_loader), total=len(test_loader)):
@@ -78,7 +110,8 @@ def test(model, test_loader, evaluator, epoch):
         adverb_gt, action_gt = data[1], data[2]
         scores, action_gt_scores, antonym_action_gt_scores = evaluator.get_scores(predictions, action_gt, adverb_gt)
         acc = calculate_p1(model.dset, antonym_action_gt_scores, adverb_gt)
-        print(acc)
+        writer.add_scalar('Acc/Test/Video-to-Adverb Antonym', acc, epoch)
+        print('E %d | Video-to-Adverb Antonym P@1: %.3f'%(epoch, acc))
 
 def calculate_p1(dset, scores, adverb_gt):
     pair_pred = np.argmax(scores.numpy(), axis=1)

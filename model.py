@@ -8,11 +8,11 @@ def load_word_embeddings(emb_file, vocab):
     vocab = [word.lower() for word in vocab]
 
     embeddings = {}
-    for line in open(emb_file, 'r'):
-        line = line.strip().split(' ')
-        word_vec = torch.FloatTensor(list(map(float, line[1:])))
-        embeddings[line[0]] = word_vec
-
+    with open(emb_file, 'r') as f:
+        for line in f:
+            line = line.strip().split(' ')
+            word_vec = torch.FloatTensor(list(map(float, line[1:])))
+            embeddings[line[0]] = word_vec
     embeddings = [embeddings[word] for word in vocab]
     embeddings = torch.stack(embeddings)
     print('loaded word embeddings')
@@ -29,10 +29,10 @@ class MLP(nn.Module):
         if relu:
             network.append(nn.ReLU(True))
 
-        self.network = nn.Sequential(*mod)
+        self.network = nn.Sequential(*network)
 
     def forward(self, x):
-        output = self.mod(x)
+        output = self.network(x)
         return output
 
 class SDPAttention(nn.Module):
@@ -80,7 +80,7 @@ class ActionModifiers(nn.Module):
             self.video_embedder = SDPAttention(dset.feature_dim, args.emb_dim, args.emb_dim, args.emb_dim,
                                                heads=4)
         else:
-            self.video_embedder = MLP(dset. feat_dim, args.emb_dim)
+            self.video_embedder = MLP(dset.feature_dim, args.emb_dim)
 
         self.action_modifiers = nn.ParameterList([nn.Parameter(torch.eye(args.emb_dim))
                                             for _ in range(len(dset.adverbs))])
@@ -175,31 +175,31 @@ class Evaluator:
         action_gt_mask = []
         for _act in dset.actions:
             mask = [1 if _act==act else 0 for adv, act in dset.pairs]
-            action_gt_mask.append(torch.ByteTensor(mask))
+            action_gt_mask.append(torch.BoolTensor(mask))
         self.action_gt_mask = torch.stack(action_gt_mask, 0)
 
         antonym_mask = []
         for _adv in dset.adverbs:
             mask = [1 if (_adv==adv or _adv==dset.antonyms[adv]) else 0 for adv, act in dset.pairs]
-            antonym_mask.append(torch.ByteTensor(mask))
+            antonym_mask.append(torch.BoolTensor(mask))
         self.antonym_mask = torch.stack(antonym_mask, 0)
 
     def get_gt_action_scores(self, scores, action_gt):
         mask = self.action_gt_mask[action_gt]
         action_gt_scores = scores.clone()
-        action_gt_scores[1-mask] = -1e10
+        action_gt_scores[~mask] = -1e10
         return action_gt_scores
 
     def get_antonym_scores(self, scores, adverb_gt):
         mask = self.antonym_mask[adverb_gt]
         antonym_scores = scores.clone()
-        antonym_scores[1-mask] = -1e10
+        antonym_scores[~mask] = -1e10
         return antonym_scores
 
     def get_gt_action_antonym_scores(self, scores, action_gt, adverb_gt):
         mask = self.antonym_mask[adverb_gt] & self.action_gt_mask[action_gt]
         action_gt_antonym_scores = scores.clone()
-        action_gt_antonym_scores[1-mask] = -1e10
+        action_gt_antonym_scores[~mask] = -1e10
         return action_gt_antonym_scores
 
     def get_scores(self, scores, action_gt, adverb_gt):
