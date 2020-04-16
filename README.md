@@ -70,3 +70,12 @@ Models corresponding to results in the paper can be found under `models/` they a
 * average.ckpt - action modifiers without the temporal attention
 * single.ckpt - action modifiers with only the second around the weak timestamp
 * action.ckpt - a pretrained action embedding with scaled dot-product attention without action modifiers
+
+### Subtitle Parsing
+To parse subtitles for action-adverb pairs you first need to download the [subtitles]() and [punctuated texts](). Alternatively you can punctuate your own subtitles with [this tool](bark.phon.ioc.ee/punctuator)
+
+Then run:
+```
+python get_action_adverb_pairs.py <path_to_subtitles> <path_to_punctuated texts> output.csv --adverb-file data/adverbs.csv --action-file data/actions.csv --task-list data/tasks.csv
+```
+`--adverb-file`, `--action-file` and `--task-list` are optional arguments use to filter the search space.
