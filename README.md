@@ -72,7 +72,7 @@ Models corresponding to results in the paper can be found under `models/` they a
 * action.ckpt - a pretrained action embedding with scaled dot-product attention without action modifiers
 
 ### Subtitle Parsing
-To parse subtitles for action-adverb pairs you first need to download the [subtitles]() and [punctuated texts](). Alternatively you can punctuate your own subtitles with [this tool](bark.phon.ioc.ee/punctuator)
+To parse subtitles for action-adverb pairs you first need to download the [subtitles](https://drive.google.com/file/d/1vMIsda1j9HupwL1triv8edDh2ikxKxjL/view?usp=sharing) and [punctuated texts](https://drive.google.com/file/d/1CJJyNd-Y0piwvdXqjnFvG6tXsFqQv0G4/view?usp=sharing). Alternatively you can punctuate your own subtitles with [this tool](bark.phon.ioc.ee/punctuator)
 
 Then run:
 ```
